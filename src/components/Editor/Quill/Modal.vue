@@ -11,31 +11,59 @@ export default defineComponent({
 		visible: Boolean,
 		content: Object,
 	},
-	setup(props) {
-		const content = ref(props.content);
-		const visible = ref(props.visible);
+	emits: ["update:visible"],
+	setup(props, { emit }) {
+		const changePreview = true;
+		const previewWidth = ref("");
+		// const contentRef = ref(props.content);
+		// const visibleRef = ref(props.visible);
 		const handleShowModal = () => {
-			visible.value = true;
+			emit("update:visible", true);
 		};
 		const handleOk = (e) => {
-			visible.value = false;
+			emit("update:visible", false);
 		};
-		console.log(content);
+		const handleChange = () => {
+			return changePreview === true ? "1280px" : "480px";
+		};
+		// watch(()=>{
+		//    console.log(content.value);
+		// })
 		return {
-			visible,
-			content,
+			changePreview,
+			previewWidth,
+			// visibleRef,
+			// contentRef,
 			handleShowModal,
 			handleOk,
+			handleChange,
 		};
 	},
 });
 </script>
 <template lang="">
 	<div>
-		<a-button type="primary" @click="handleShowModal">modal</a-button>
-		<a-modal title="preview" v-model:visible="visible" @ok="handleOk">
-			<QuillEditor v-model:content="content" theme="" toolbar="" />
+		<a-button type="primary" @click="showModal">Open Modal</a-button>
+		<a-modal v-model:visible="visible" title="Preview" @ok="handleOk" width="1400px">
+			<div class="preview">
+				<QuillEditor class="laptop" v-if="visible" :content="content" theme="" toolbar="" readOnly />
+				<QuillEditor class="mobile" v-if="visible" :content="content" theme="" toolbar="" readOnly />
+			</div>
 		</a-modal>
 	</div>
 </template>
-<style lang=""></style>
+<style lang="scss">
+.preview {
+	display: flex;
+	flex-direction: column;
+}
+.laptop {
+	width: 1280px;
+	background-color: beige;
+}
+.mobile {
+	width: 414px;
+	height: 844px;
+	background-color: burlywood;
+}
+</style>

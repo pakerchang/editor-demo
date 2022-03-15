@@ -11,7 +11,7 @@ export default {
 	},
 	data() {
 		return {
-			preview: "",
+			preview: null,
 			visible: false,
 			editorOption: {
 				placeholder: "Please enter here",
@@ -20,20 +20,20 @@ export default {
 				modules: {
 					toolbar: {
 						container: [
-							["bold", "italic", "underline", "strike"], 
+							["bold", "italic", "underline", "strike"],
 							["blockquote", "code-block"],
 							[{ header: 1 }, { header: 2 }],
 							[{ list: "ordered" }, { list: "bullet" }],
 							[{ script: "sub" }, { script: "super" }],
-							[{ indent: "-1" }, { indent: "+1" }], 
-							[{ direction: "rtl" }], 
+							[{ indent: "-1" }, { indent: "+1" }],
+							[{ direction: "rtl" }],
 							[{ size: ["small", false, "large", "huge"] }],
 							[{ header: [1, 2, 3, 4, 5, 6, false] }],
-							[{ color: [] }, { background: [] }], 
+							[{ color: [] }, { background: [] }],
 							[{ font: [] }],
 							[{ align: [] }],
 							["link", "video"],
-							["clean"], 
+							["clean"],
 							["showPreview"],
 						],
 						handlers: {
@@ -63,7 +63,6 @@ export default {
 			this.visible = !false;
 		},
 	},
-	// imo
 };
 </script>
 <template lang="">
@@ -73,8 +72,9 @@ export default {
 			<QuillEditor v-model="preview" :options="editorOption" @update:content="onEditorChange($event)"> </QuillEditor>
 			<!-- <a-button type="primary" @click="showModal">showModal</a-button> -->
 			<!-- <a-modal v-model="visible" title="Title" onOk="showM"></a-modal> -->
-			<Modal :content="preview" :visible="false" />
+			<Modal :content="preview" v-model:visible="visible" />
 		</div>
+		<QuillEditor v-model:content="preview" theme="" toolbar="" :readOnly="true"> </QuillEditor>
 		<!-- <div class="preview">{{ preview }}</div> -->
 	</div>
 </template>
